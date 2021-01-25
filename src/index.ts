@@ -125,7 +125,8 @@ const dbConfig = {
   user: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
-  schema: process.env.DB_SCHEMA || 'public'
+  schema: process.env.DB_SCHEMA || 'public',
+  charset: process.env.DB_CHARSET || 'utf8',
 };
 
 const log = createLogger();

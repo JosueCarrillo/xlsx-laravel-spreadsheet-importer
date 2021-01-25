@@ -10,6 +10,7 @@ function wrapColumn(c) {
 
 export class MySQLAdapter implements DatabaseAdapter {
   protected client = null;
+  protected charset = null;
 
   public async connect(options: any): Promise<any> {
     if (this.client) {
@@ -22,11 +23,13 @@ export class MySQLAdapter implements DatabaseAdapter {
       port: other.port,
       user: other.user,
       password: other.password,
-      database: other.database
+      database: other.database,
+      charset: other.charset,
     };
     const connection = mysql.createConnection(dbConfig);
     connection.connect();
     this.client = connection;
+    this.charset = dbConfig.charset;
     return this.client;
   }
 
@@ -68,7 +71,7 @@ export class MySQLAdapter implements DatabaseAdapter {
     // language=MySQL
     return new Promise((resolve, reject) => {
       this.client.query(
-        `create table if not exists ${tableName} (${columnDefs})`,
+        `create table if not exists ${tableName} (${columnDefs}) character set ${this.charset}`,
         (error, results) => {
           if (error) {
             reject(error);
